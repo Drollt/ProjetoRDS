@@ -23,7 +23,7 @@ public class CameraRotation : MonoBehaviour
         // Calcula a distância entre o mouse e o objeto
         float mouseDistance = offset.magnitude;
 
-        Debug.Log(mouseDistance);
+        //Debug.Log(mouseDistance);
 
         // Verifica se o mouse está a uma distância segura antes de atualizar a rotação
         if (mouseDistance > minMouseDistance)
