@@ -6,6 +6,7 @@ using UnityEngine.PlayerLoop;
 public class Bullet : MonoBehaviour
 {
     public float speed;
+    public float bulletDamage;
     public float life;
     public float maxLife;
 
@@ -22,9 +23,12 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag != "Bullet")
+
+        if(collision.tag == "Boss")
         {
-            Destroy(gameObject);
+            collision.gameObject.GetComponent<EnemyStats>().life -= bulletDamage;
         }
+
+        Destroy(gameObject);
     }
 }

@@ -8,8 +8,8 @@ public class Boss_Run : StateMachineBehaviour
     public Transform character;
     Rigidbody2D rb;
     [SerializeField]
-    float speed = 3f;
-    float attackRange = 1.5f;
+    public float speed = 3f;
+    public float attackRange = 1.5f;
 
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
