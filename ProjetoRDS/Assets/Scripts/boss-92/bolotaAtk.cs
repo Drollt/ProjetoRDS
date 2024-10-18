@@ -7,12 +7,18 @@ public class bolotaAtk : MonoBehaviour
     public GameObject player;            // player
     public float orbitRadius = 1f;       // raio de Orbita
     public float orbitSpeed = 100f;      // velocidade de Orbita
-    public float shootDelay = 3f;        // tempo em tela
+    public float shootDelay = 3f;        // tempo orbitando
     public int numberOfProjectiles = 3;  // quantas bolotas (projetil) tem
     public float shootInterval = 1f;     // intervalo de tempo de cada disparo
     private GameObject[] projectiles;    // armazenamento de cada bolota (projetil)
+    public BossRandomMovement bossMovementScript; //referencia de script de movimento do boss
 
     private void Start()
+    {
+        StartNewProjetileCycle(); //chama o primeiro ciclo das bolotas (projeteis)
+    }
+
+    private void StartNewProjetileCycle()  //metodo pra comecar a usar o novo ciclo das bolotas (projeteis)
     {
         projectiles = new GameObject[numberOfProjectiles]; // inicia o array com o numero de bolotas (projeteis) que tem no 'numberOfProjectiles'
 
@@ -57,6 +63,10 @@ public class bolotaAtk : MonoBehaviour
     private void StartShootingProjectiles() //metodo que chamado apos o 'shootDelay'
     {
         StopAllCoroutines(); // para todas as corrotinas ativas
+        if (bossMovementScript != null) //desativa a movimentacao do boss assim que comeca a disparar
+        {
+            bossMovementScript.enabled = false; // desativa o movimento do boss
+        }
         StartCoroutine(ShootProjectiles()); // inicia uma nova corrotina para disparar as bolotas (projeteis)
     }
 
@@ -64,7 +74,7 @@ public class bolotaAtk : MonoBehaviour
     {
         for (int i = 0; i < numberOfProjectiles; i++) //loop que repete para todos as bolotas (projeteis)
         {
-            if (projectiles[i] != null) 
+            if (projectiles[i] != null)
             {
                 // solta a bolota (projétil) da órbita e faz ele ir em direção ao player
                 Vector3 directionToPlayer = (player.transform.position - projectiles[i].transform.position).normalized;
@@ -75,10 +85,39 @@ public class bolotaAtk : MonoBehaviour
                     rb.velocity = directionToPlayer * 10f; // define a velocidade do bolota (projétil) em direção ao player
                 }
 
-                Destroy(projectiles[i], 5f); //destroi a bolota (projetil) lançado a cada 5 segundos
+                Destroy(projectiles[i], 2f); //destroi a bolota (projetil) lançado a cada 3 segundos
 
                 yield return new WaitForSeconds(shootInterval); //espera o 'shootInterval' para disparar a proxima bolota (projetil)
             }
+        }
+
+        StartCoroutine(CheckAllProjectilesDestroyed()); //inicia uma corrotina que ve se todas as bolotas (projeteis) foram destruidas
+    }
+
+    private IEnumerator CheckAllProjectilesDestroyed() //corrotina responsavel por ver se todas as bolotas (projeteis) foram destruidas para iniciar o ciclo novamente
+    {
+        while (true)
+        {
+            bool allDestroyed = true; // esse 'for' e a variavel 'allDestroyed' basicamente fala que se existir bolotas (projeteis) a variavel sera 'false'
+            for (int i = 0; i < projectiles.Length; i++)
+            {
+                if (projectiles[i] != null)
+                {
+                    allDestroyed = false;
+                    break;
+                }
+            }
+            if (allDestroyed) //se a variavel 'allDestroyed' for 'true' (nao existe mais bolotas(projeteis)) vai rodar esse if
+            {
+                if (bossMovementScript != null) //reativa o boss quando todos as bolotas (projeteis) forem disparados
+                {
+                    bossMovementScript.enabled = true; // reativa o movimento do boss
+                }
+                yield return new WaitForSeconds(6f); //pausa a corrotina (6 segundos)
+                StartNewProjetileCycle(); //chama esse metodo para iniciar um novo ciclo de bolotas (projeteis)
+                break;
+            }
+            yield return null;
         }
     }
 }
