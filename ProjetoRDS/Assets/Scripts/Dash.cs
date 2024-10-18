@@ -23,7 +23,6 @@ public class Dash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(canDash);
         var dashInput = Input.GetKey(KeyCode.LeftShift);
 
         if (dashInput && canDash >= 1)

@@ -1,32 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using UnityEngine.UIElements;
 
-public class JumpAttack : StateMachineBehaviour
+public class JumpAttack : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private BoxCollider2D col;
+    Animator animator;
 
-    public Transform player;
+    public Transform character;
+    private Vector2 targetPosition;
 
-    public float speedJump;
+    public float jumpForce = 5f;
+    public Transform[] targetsShoot;
 
-    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public GameObject bulletPrefab;
+    public float bulletSpeed = 10f; 
+
+    // Start is called before the first frame update
+    void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Character").transform;
+        character = GameObject.FindGameObjectWithTag("Character").transform;
 
-        rb = animator.GetComponent<Rigidbody2D>();
+        rb = this.GetComponent<Rigidbody2D>();
 
-        Jump();
+        col = this.GetComponent<BoxCollider2D>();
+
+        animator = this.GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Vector2.Distance(transform.position, targetPosition) <= 0.1) //calcular distancia entre player e boss
+        {
+            StopMovement();
+        }
     }
 
     void Jump()
     {
-        if(player != null)
+        //Pulo pra cima do Player do Boss
+        col.isTrigger = true;
+
+        targetPosition = character.position;
+        Vector2 direction = (targetPosition - rb.position).normalized;
+        rb.AddForce(direction * jumpForce, ForceMode2D.Impulse);
+    }
+
+    void StopMovement()
+    {
+        // Para o pulo
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        col.isTrigger = false;  
+    }
+
+    void Shoot()
+    {
+        //Atira pra todas posições do targetsShoot
+        col.isTrigger = false;
+        foreach (Transform target in targetsShoot)
         {
-            Vector2 target = new Vector2(player.position.x, player.position.y);
-            Vector2 newPos = Vector2.MoveTowards(rb.position, target, speedJump * Time.fixedDeltaTime);
-            rb.MovePosition(newPos);
+            GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+            Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+
+            Vector2 direction = (target.position - transform.position).normalized;
+            bulletRb.velocity = direction * bulletSpeed;
+
+            Destroy(bullet, 2);
         }
     }
+
 }

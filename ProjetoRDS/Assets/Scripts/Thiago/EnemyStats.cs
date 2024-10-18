@@ -7,6 +7,8 @@ public class EnemyStats : MonoBehaviour
     public float maxLife;
     public float life;
 
+    private int step = 1;
+
     Animator animator;
 
     // Start is called before the first frame update
@@ -19,7 +21,7 @@ public class EnemyStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(life <= 0) //Morte
+        if (life <= 0) //Morte
         {
             Destroy(gameObject);
         }
@@ -30,11 +32,34 @@ public class EnemyStats : MonoBehaviour
 
     void Steps()
     {
-        if(life <= 5)
+        switch (step)
         {
-            maxLife = 50;
-            life = 50;
-            animator.SetInteger("Step", 2);
+            case 1:
+                if (life <= 5)
+                {
+                    maxLife = 30;
+                    life = 30;
+                    animator.SetInteger("Step", 2);
+                    step = 2;
+                }
+                break;
+
+            case 2:
+                if (life <= 1)
+                {
+                    maxLife = 75;
+                    life = 75;
+                    animator.SetInteger("Step", 3);
+                    step = 3;
+                }
+                break;
+
+            case 3:
+                if (life <= 0)
+                {
+                    Destroy(this);
+                }
+                break;
         }
     }
 

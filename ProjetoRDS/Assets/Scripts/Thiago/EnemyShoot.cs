@@ -30,7 +30,6 @@ public class EnemyShoot : StateMachineBehaviour
 
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
             rb.velocity = direction * bulletSpeed;
-
         }
         
     }
