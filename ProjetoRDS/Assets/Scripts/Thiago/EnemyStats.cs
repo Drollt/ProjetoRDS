@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyStats : MonoBehaviour
 {
+    public Scrollbar lifeScrollBar;
+
     public float maxLife;
     public float life;
 
@@ -21,6 +24,9 @@ public class EnemyStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Controla a barra de vida
+        lifeScrollBar.size = life / maxLife;
+
         if (life <= 0) //Morte
         {
             Destroy(gameObject);
