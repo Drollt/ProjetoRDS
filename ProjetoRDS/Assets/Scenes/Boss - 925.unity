@@ -282,6 +282,7 @@ MonoBehaviour:
   shootDelay: 3
   numberOfProjectiles: 3
   shootInterval: 2
+  bossMovementScript: {fileID: 0}
 --- !u!4 &699665956
 Transform:
   m_ObjectHideFlags: 0
@@ -661,6 +662,21 @@ MonoBehaviour:
   shootDelay: 5
   numberOfProjectiles: 5
   shootInterval: 1
+  bossMovementScript: {fileID: 1435064095}
+--- !u!114 &1435064095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725443717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5080eb92e929fa4498141cbdc486dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  changeDirectionTime: 10
 --- !u!1 &1764538182
 GameObject:
   m_ObjectHideFlags: 0
